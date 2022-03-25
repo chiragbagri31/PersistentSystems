@@ -63,11 +63,13 @@ public class Main
 }
 
 
+
 // Stall.java
 public interface Stall 
 {
  	abstract void display();
 }
+
 
 
 // GoldStall.java
@@ -139,5 +141,42 @@ public class PremiumStall implements Stall
         System.out.println("Cost:" + this.cost + ".Rs");
         System.out.println("Owner Name:" + this.ownerName);
         System.out.println("Number of Projectors:" + this.projector);
+	}
+}
+
+
+
+// ExecutiveStall.java
+public class ExecutiveStall	implements Stall
+{
+	private String stallName;
+	private int cost;
+	private String ownerName;
+	private int screen;
+
+	// setters for all objects(not needed written just because of validation)
+	public void setStallName(String stallName) 
+	{
+        this.stallName = stallName;
+    }
+    public void setCost(int cost) 
+	{
+        this.cost = cost;
+    }
+    public void setOwnerName(String ownerName) 
+	{
+        this.ownerName = ownerName;
+    }
+    public void setScreen(int screen) 
+	{
+        this.screen = screen;
+    }
+
+	public void display()
+	{
+		System.out.println("Stall Name:" + this.stallName);
+        System.out.println("Cost:" + this.cost + ".Rs");
+        System.out.println("Owner Name:" + this.ownerName);
+        System.out.println("Number of Screens:" + this.screen);
 	}
 }
