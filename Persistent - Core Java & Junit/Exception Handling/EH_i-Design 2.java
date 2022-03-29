@@ -8,6 +8,8 @@ public class Main
 
 		System.out.println("Enter the number of seats to be booked:");
 		int n = sc.nextInt();
+		
+		int s = 0;
 
 		try
 		{
@@ -23,10 +25,14 @@ public class Main
 				for(int i=0; i<n; i++)
 				{
 					System.out.println("Enter the seat number " + (i+1));
-					seat[i] = sc.nextInt();
-					if(seat[i]>100 || seat[i]<0)
+					s = sc.nextInt();
+					if(s>100 || s<0)
 					{
 						throw new ArrayIndexOutOfBoundsException();
+					}
+					else
+					{
+						seat[i] = s;
 					}
 				}
 
@@ -40,7 +46,7 @@ public class Main
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{
-			System.out.println("java.lang.ArrayIndexOutOfBoundsException: 100");
+			System.out.println("java.lang.ArrayIndexOutOfBoundsException: " + (s - 1));
 		}
 	}
 }
