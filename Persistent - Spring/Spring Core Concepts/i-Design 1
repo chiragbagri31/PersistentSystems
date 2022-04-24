@@ -1,0 +1,165 @@
+// Main.java
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.spring.Event;
+import com.spring.EventList;
+
+public class Main 
+{
+	public static void main(String[] args) 
+	{
+		Logger log = Logger.getLogger("org.hibernate");
+		log.setLevel(Level.OFF);
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		
+		ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+		Event e1 = (Event) ac.getBean("event1");
+		Event e2 = (Event) ac.getBean("event2");
+		Event e3 = (Event) ac.getBean("event3");
+
+		EventList eList = new EventList();
+		eList.insert(e1);
+		eList.insert(e2);
+		eList.insert(e3);
+
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter your Budget");
+		double budget = sc.nextDouble();
+
+		ArrayList<String> list = new ArrayList<String>(eList.recommendfor(budget));
+		if (list.isEmpty())
+		{
+			System.out.println("No Shows available");
+		}	
+		else 
+		{
+			for (int i = 0; i < list.size(); i++) 
+			{
+				System.out.println(list.get(i));
+			}
+		}	
+		sc.close();
+	}
+}
+
+
+
+
+// applicationContext.xml
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+    <bean id="event1" class="com.spring.Event">
+		<property name="eventName" value="Magic Show"></property>
+		<property name="eventOrganiser" value="Vadivel"></property>
+		<property name="fare" value="650"></property>
+	</bean>
+
+	<bean id="event2" class="com.spring.Event">
+		<property name="eventName" value="Puppet Show"></property>
+		<property name="eventOrganiser" value="Maggie"></property>
+		<property name="fare" value="250"></property>
+	</bean>
+        
+	<bean id="event3" class="com.spring.Event">
+		<property name="eventName" value="Standup Comedy"></property>
+		<property name="eventOrganiser" value="Arun"></property>
+		<property name="fare" value="500"></property>
+	</bean>
+
+</beans>
+
+
+
+
+// Event.java
+package com.spring;
+
+public class Event 
+{
+	String eventName;
+	String eventOrganiser;
+	Double fare;
+
+	// eventName getter and setter
+	public void setEventName(String eventName) 
+	{
+		this.eventName = eventName;
+	}
+	public String getEventName() 
+	{
+		return eventName;
+	}
+	
+	// eventOrganiser getter and setter
+	public void setEventOrganiser(String eventOrganiser) 
+	{
+		this.eventOrganiser = eventOrganiser;
+	}
+	public String getEventOrganiser() 
+	{
+		return eventOrganiser;
+	}
+	
+	// fare getter and setter
+	public void setFare(Double fare) 
+	{
+		this.fare = fare;
+	}
+	public Double getFare() 
+	{
+		return fare;
+	}
+	
+	public void display() 
+	{
+		System.out.println("Event Name :" + getEventName());
+		System.out.println("Event Organiser :" + getEventOrganiser());
+		System.out.println("Fare :" + getFare());
+	}
+}
+
+
+
+
+// EventList.java
+package com.spring;
+
+import java.util.ArrayList;
+
+public class EventList 
+{
+	ArrayList<Event> eventMenu = new ArrayList<>();
+
+	public void insert(Event event) 
+	{
+		eventMenu.add(event);
+	}
+
+	public ArrayList<String> recommendfor(Double budget) 
+	{
+		ArrayList<String> reco = new ArrayList<String>();
+		for (int i=0; i<eventMenu.size(); i++) 
+		{
+			Event e = eventMenu.get(i);
+			int noOftickets = (int) (budget / e.getFare());
+			if (noOftickets != 0)
+			{
+				reco.add(e.eventName + "-" + noOftickets);
+			}
+			else 
+			{
+				break;
+			}
+		}
+		return reco;
+	}
+}
