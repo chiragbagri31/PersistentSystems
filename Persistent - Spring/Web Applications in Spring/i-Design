@@ -1,0 +1,121 @@
+// messeges.properties
+user.userName.empty=User Name cannot be empty!
+user.password.empty=Password cannot be empty!
+
+
+
+
+// spring-servlet.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:annotation-config></context:annotation-config>
+    <context:component-scan base-package="com.spring"></context:component-scan>
+    <context:property-placeholder location="classpath:oracle.properties"/>
+    <mvc:annotation-driven></mvc:annotation-driven>
+    <mvc:resources location="/resources/" mapping="/resources/** " />
+    
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/views/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>   
+    
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames" value="/WEB-INF/messages/messages"></property>
+    </bean>
+    
+</beans>
+
+
+
+
+// web.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+    <servlet-name>spring</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>spring</servlet-name>
+    <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+
+
+
+// LoginValidator.java
+package com.spring;
+
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+
+@Component
+public class LoginValidator implements Validator 
+{
+    @Override
+    public boolean supports(Class<?> type) 
+    {
+       throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void validate(Object o, Errors errors) 
+    {
+        ValidationUtils.rejectIfEmpty(errors,"userName","user.userName.empty");
+        ValidationUtils.rejectIfEmpty(errors,"password","user.password.empty");
+    }    
+}
+
+
+
+
+// LoginController.java
+package com.spring;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class LoginController 
+{
+    @Autowired
+    private LoginValidator lv;
+    
+    @RequestMapping(value="/")
+    public ModelAndView login()
+    {
+        ModelAndView mv= new ModelAndView();
+        mv.setViewName("Login");
+        return mv;
+    }
+    
+    @RequestMapping(value="/loginProcess.do")
+    public ModelAndView loginProcess(@ModelAttribute("user") User user,BindingResult result)
+    {
+        lv.validate(user,result);
+        if(result.hasErrors()){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("Login");
+        return mv;}
+        return new ModelAndView("Home");  
+    }
+}
