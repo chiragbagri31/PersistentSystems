@@ -1,0 +1,165 @@
+// PatientController.java
+package com.springboot.controller;
+
+import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import com.springboot.dao.PatientDAO;
+import com.springboot.domain.Patient;
+
+@RestController
+public class PatientController 
+{
+    PatientDAO pdao = new PatientDAO();
+    
+    @ResponseBody
+    @RequestMapping("/patient/list")
+    List<Patient> listPatients()
+    { 
+        return pdao.getPatients();
+    }
+    
+    @ResponseBody
+    @RequestMapping("/patient/create")    
+    List<Patient> createPatient(@RequestBody Patient patient)
+    {
+        return pdao.createPatient(patient); 
+    }   
+}
+
+
+
+
+// Patient.java
+package com.springboot.domain;
+
+import java.util.Date;
+
+public class Patient 
+{
+	private Long id;
+	private String name;
+	private String contactNumber;
+	private String email;
+	private String dateOfBirth;
+	
+	public Patient() 
+	{
+		super();
+	}
+	public Patient(Long id, String name, String contactNumber, String email, String dateOfBirth) 
+	{
+		super();
+		this.id = id;
+		this.name = name;
+		this.contactNumber = contactNumber;
+		this.email = email;
+		this.dateOfBirth = dateOfBirth;
+	}
+	
+	// id getter and setter
+	public void setId(Long id) 
+	{
+		this.id = id;
+	}
+	public Long getId() 
+	{
+		return id;
+	}
+	
+	// name getter and setter
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+	
+	// contactNumber getter and setter
+	public void setContactNumber(String contactNumber) 
+	{
+		this.contactNumber = contactNumber;
+	}
+	public String getContactNumber() 
+	{
+		return contactNumber;
+	}
+	
+	// email getter and setter
+	public void setEmail(String email) 
+	{
+		this.email = email;
+	}
+	public String getEmail() 
+	{
+		return email;
+	}
+	
+	// dateOfBirth getter and setter
+	public void setDateOfBirth(String dateOfBirth) 
+	{
+		this.dateOfBirth = dateOfBirth;
+	}
+	public String getDateOfBirth()
+	{
+		return dateOfBirth;
+	}
+}
+
+
+
+
+// PatientDAO.java
+package com.springboot.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
+import com.springboot.domain.Patient;
+
+@Component
+public class PatientDAO 
+{
+	static List<Patient> patientList = new ArrayList<>(); 
+	
+	static 
+	{
+		patientList.add(new Patient(1L, "Swathy", "9876567234", "swathy@gmail.com", "31-07-1989"));
+		patientList.add(new Patient(2L, "Vanmathi", "9873877234", "vanmathi@gmail.com", "23-04-1992"));
+		patientList.add(new Patient(3L, "Kevin", "9823641234", "kevin@gmail.com", "01-04-2000"));
+	}
+	
+	public List<Patient> createPatient(Patient p)
+	{
+        patientList.add(p);
+        return patientList;
+    }
+	
+	public List<Patient> getPatients()
+	{
+        return patientList;
+    }
+}
+
+
+
+
+// AppApplication.java
+package com.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AppApplication 
+{
+	public static void main(String[] args) 
+	{
+		SpringApplication.run(AppApplication.class, args);
+	}
+}
