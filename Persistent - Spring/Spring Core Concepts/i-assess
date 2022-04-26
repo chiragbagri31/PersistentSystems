@@ -1,0 +1,203 @@
+// Main.java
+import com.spring.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Main 
+{
+	public static void main(String[] args) throws NumberFormatException, IOException 
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		Logger log = Logger.getLogger("org.hibernate");
+		log.setLevel(Level.OFF);
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		
+		// for owner
+		System.out.println("Enter the number of owners you want to create");
+		Integer noOfOwners = Integer.parseInt(br.readLine());
+		ArrayList<Owner> ownerList = new ArrayList<>();
+		for(int i=1; i<=noOfOwners; i++) 
+		{
+			Owner owner = (Owner) context.getBean("owner");
+			
+			System.out.println("Enter the Name and Password of the Owner");
+			String name = br.readLine();
+			String password = br.readLine();
+
+			owner.setName(name);
+			owner.setPassword(password);
+			
+			ownerList.add(owner);
+		}
+
+		// for event
+		System.out.println("Enter the number of events you want to create");
+		Integer noOfEvents = Integer.parseInt(br.readLine());
+		int count = 1;
+		ArrayList<Event> eventList = new ArrayList<>();
+		for(int i=1; i<=noOfEvents; i++) 
+		{
+			Event event = (Event)context.getBean("event");
+
+			System.out.println("Enter the  Event name");
+			String eventName = br.readLine();
+			event.setEventName(eventName);
+
+			System.out.println("Select any option from the list and enter the number");
+			for(Owner o:ownerList)
+			{
+				System.out.println((count++)+")"+o.getName());
+			}
+			count = 1;
+			
+			System.out.println("Enter the choice");
+			Integer choice = Integer.parseInt(br.readLine());
+
+			Owner eventOrganiser = ownerList.get(choice-1);
+			event.setEventOrganiser(eventOrganiser);
+			eventList.add(event);
+		}
+		
+		// for printing output
+		System.out.println("...Listing events...");
+		count = 1;
+		for(Event e:eventList) 
+		{
+			String eventName = e.getEventName();
+			Owner o = e.getEventOrganiser();
+			
+			System.out.println((count++)+")"+eventName+" - "+o.getName());
+		}
+	}
+}
+
+
+
+
+applicationContext.xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	 
+    <bean id="owner" class="com.spring.Owner" scope="prototype"></bean>
+    <bean id="event" class="com.spring.Event" scope="prototype"></bean>
+</beans>
+
+
+
+
+// Event.java
+package com.spring;
+
+public class Event 
+{
+	int id;
+	String eventName;
+	Owner eventOrganiser;
+
+	public Event() 
+	{
+		System.out.println("...Creating a new event...");
+	}
+
+	// id getter and setter
+	public void setId(int id) 
+	{
+		this.id = id;
+	}
+	public int getId() 
+	{
+		return id;
+	}
+	
+	// eventName getter and setter
+	public void setEventName(String eventName) 
+	{
+		this.eventName = eventName;
+	}
+	public String getEventName() 
+	{
+		return eventName;
+	}
+	
+	// eventOrganiser getter and setter
+	public void setEventOrganiser(Owner eventOrganiser) 
+	{
+		this.eventOrganiser = eventOrganiser;
+	}
+	public Owner getEventOrganiser() 
+	{
+		return eventOrganiser;
+	}
+	
+	public void display() 
+	{
+		
+	}
+	public void setProperties(String eventName) 
+	{
+		this.setEventName(eventName);
+	}
+}
+
+
+
+
+// Owner.java
+package com.spring;
+
+public class Owner 
+{
+	String name;
+	String password;
+
+	public Owner() 
+	{
+		System.out.println("...Creating an owner...");
+	}
+
+	// name getter and setter
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+	
+	// password getter and setter
+	public void setPassword(String password) 
+	{
+		this.password = password;
+	}
+	public String getPassword() 
+	{
+		return password;
+	}
+	
+	public void display() 
+	{
+		System.out.println(this.name);
+	}
+	
+	public void setProperties(String name,String password) 
+	{
+
+	}
+}
