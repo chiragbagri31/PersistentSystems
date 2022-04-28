@@ -1,0 +1,157 @@
+// DoctorController.java
+package com.springboot.controller;
+
+import com.springboot.model.Doctor;
+import com.springboot.service.DoctorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DoctorController 
+{
+	@Autowired
+	private DoctorService service;
+
+	@GetMapping("/add/doctor")
+	public Doctor addDoctor(@RequestParam("doctorId") String doctorId,
+							@RequestParam("name") String name,
+							@RequestParam("experience") String experience
+	) 
+	{
+		Double exp = Double.parseDouble(experience);
+		return service.createDoctor(doctorId, name, exp);
+	}
+
+	@GetMapping("/remove/doctor")
+	public String removeDoctor(@RequestParam("doctorId") String doctorId) 
+	{
+		return service.deleteDoctor(doctorId);
+	}
+}
+
+
+
+
+// DoctorService.java
+package com.springboot.service;
+
+import org.springframework.stereotype.Service;
+import com.springboot.model.Doctor;
+
+@Service
+public class DoctorService 
+{
+    public Doctor createDoctor(String doctorId,
+                               String name,
+                               Double experience) 
+    {
+        Doctor doc = new Doctor(doctorId,name,experience );
+        return doc;
+    }
+
+    public String deleteDoctor(String doctorId) {
+        return "Doctor removed";
+    }
+}
+
+
+
+
+// App.java
+package com.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@SpringBootApplication
+@EnableAspectJAutoProxy(proxyTargetClass=true)
+public class App 
+{
+    public static void main(String[] args) 
+	{
+		SpringApplication.run(App.class, args);
+	}
+}
+
+
+
+
+// Doctor.java
+package com.springboot.model;
+
+public class Doctor 
+{
+	private String doctorId;
+	private String name;
+	private Double experience;
+		
+	public Doctor(String doctorId, String name, Double experience) 
+	{
+		super();
+		this.doctorId = doctorId;
+		this.name = name;
+		this.experience = experience;
+	}
+	
+	// doctorId getter and setter
+	public void setId(String doctorId) 
+	{
+		this.doctorId = doctorId;
+	}
+	public String getId()
+	{
+		return doctorId;
+	}
+
+	// name getter and setter
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+	
+	// experience getter and setter
+	public void setExperience(Double experience) 
+	{
+		this.experience = experience;
+	}
+	public Double getExperience() 
+	{
+		return experience;
+	}
+}
+
+
+
+
+// DoctorServiceAspect.java
+package com.springboot.aspect;
+
+import org.aspectj.lang.*;
+import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
+
+@Aspect
+public class DoctorServiceAspect 
+{
+	@Before("execution(public * createDoctor(id, name, experience) )")
+	public void beforeAdvice(JoinPoint jp, String id, String name, Double experience) 
+	{
+		System.out.println(jp.getSignature());
+		System.out.println("Before method:Doctor com.springboot.service.DoctorService.createDoctor(String,String,Double)");
+		System.out.println("Creating doctor with id - " + id + ", name - " + name + " and experience - " + experience);
+	}
+
+	@Before("execution(* removeDoctor(doctorId))")
+	public void beforeAdvice(JoinPoint jp, String doctorId) 
+	{
+		System.out.println("Before method:Doctor com.springboot.service.DoctorService.deleteDoctor(String)");
+		System.out.println("Deleting doctor with id - " + doctorId);
+	}
+}
