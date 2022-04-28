@@ -1,0 +1,157 @@
+// EmployeeController.java
+package com.springboot.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import com.springboot.model.Employee;
+import com.springboot.service.EmployeeService;
+
+@RestController
+public class EmployeeController 
+{
+	@Autowired
+	private EmployeeService service;
+
+	@RequestMapping("/display/employee")
+	public void displayEmployee(@RequestParam("employeeId") String employeeId) 
+	{
+		service.displayEmployee(employeeId);
+	}
+}
+
+
+
+
+// EmployeeService.java
+package com.springboot.service;
+
+import org.springframework.stereotype.Service;
+import com.springboot.model.Employee;
+
+@Service
+public class EmployeeService 
+{
+    public void displayEmployee(String employeeId) 
+    {
+        System.out.println("Inside displayEmployee() in EmployeeService class");
+		if(employeeId.equals("121")) 
+        {
+            System.out.println("employee id - 121");
+        }
+        else 
+        {
+            System.out.println("Sorry, wrong employee id");
+        }
+	}
+}
+
+
+
+
+// App.java
+package com.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+import java.util.Properties;
+@SpringBootApplication
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+public class App 
+{
+	public static void main(String[] args) 
+	{
+		SpringApplication.run(App.class, args);
+	}
+}
+
+
+
+
+// Employee.java
+package com.springboot.model;
+
+public class Employee 
+{
+	private String employeeId;
+	private String name;
+	private Double experience;
+		
+	public Employee(String employeeId, String name, Double experience)
+	{
+		super();
+		this.employeeId = employeeId;
+		this.name = name;
+		this.experience = experience;
+	}
+	
+	// employeeId getter and setter
+	public void setId(String employeeId) 
+	{
+		this.employeeId = employeeId;
+	}
+	public String getId() 
+	{
+		return employeeId;
+	}
+	
+	// name getter and setter
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+
+	// experience getter and setter
+	public void setExperience(Double experience) 
+	{
+		this.experience = experience;
+	}
+	public Double getExperience() 
+	{
+		return experience;
+	}
+}
+
+
+
+
+// EmployeeServiceAspect.java
+package com.springboot.aspect;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+public class EmployeeServiceAspect 
+{
+	@Pointcut("execution(* com.springboot.service.EmployeeService.displayEmployee(..))")
+	public void log() 
+	{
+
+	}
+
+	@Around(value= "log()")
+	public void aroundAdvice(ProceedingJoinPoint jp) throws Throwable 
+	{
+		System.out.println("The method aroundAdvice() before invokation of the method displayEmployee method");
+
+		try 
+		{
+			jp.proceed();
+		}
+		catch (Exception e) 
+		{
+
+		}
+		
+		System.out.println("The method aroundAdvice() after invokation of the method displayEmployee method");
+	}  
+}
