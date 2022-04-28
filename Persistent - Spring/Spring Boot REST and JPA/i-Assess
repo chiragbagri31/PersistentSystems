@@ -1,0 +1,171 @@
+// WheatherRepository.java
+package com.weather.jpa.repository;
+
+import org.springframework.stereotype.Repository;
+import com.weather.jpa.domain.WeatherReport;
+import java.util.*;
+import org.springframework.data.repository.CrudRepository;
+
+@Repository("weatherRepository") 
+public interface WeatherRepository extends CrudRepository<WeatherReport, Long>
+{
+
+}
+
+
+
+
+// WheatherController.java
+package com.weather.jpa.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import com.weather.jpa.domain.WeatherReport;
+import com.weather.jpa.repository.WeatherRepository;
+
+@RestController
+public class WeatherController 
+{
+	@Autowired 
+	private WeatherRepository repo;
+
+	@GetMapping("/weatherReport")
+	public List<WeatherReport> getData() 
+	{
+		List<WeatherReport> list = new ArrayList<>();
+		repo.findAll().forEach(x->list.add(x));
+		return list;
+	}
+	
+	@PostMapping("/weatherReport")
+	public WeatherReport addUsers(@RequestBody WeatherReport cases)
+	{
+		return repo.save(cases);
+	}
+	
+	@PutMapping("/weatherReport")
+	public WeatherReport updateUsers(@RequestBody WeatherReport cases) 
+	{
+		return repo.save(cases);
+	}
+	
+	@GetMapping("/weatherReport/{id}")
+	public WeatherReport view(@PathVariable Long id) 
+	{
+		return repo.findById(id).get();
+	}
+	
+	@DeleteMapping("/weatherReport/{id}")
+	public Boolean deleteUsers(@PathVariable Long id)
+	{
+		WeatherReport x = repo.findById(id).get();
+		repo.delete(x);
+		return true;
+	}
+}
+
+
+
+
+// WheatherJpaApplication.java
+package com.weather.jpa;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class WeatherJpaApplication 
+{
+	public static void main(String[] args) 
+	{
+		SpringApplication.run(WeatherJpaApplication.class, args);
+	}
+}
+
+
+
+
+// WheatherReport.java
+package com.weather.jpa.domain;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "weather_report")
+public class WeatherReport 
+{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@Column(name = "city")
+	private String city;
+	@Column(name = "min_temperature")
+	private Double minTemperature;
+	@Column(name = "max_temperature")
+	private Double maxTemperature;
+	
+	public WeatherReport(){}
+
+	public WeatherReport(Long id, String city, Double minTemperature, Double maxTemperature) 
+	{
+		super();
+		this.id = id;
+		this.city = city;
+		this.minTemperature = minTemperature;
+		this.maxTemperature = maxTemperature;
+	}
+
+	// id getter and setter
+	public void setId(Long id) 
+	{
+		this.id = id;
+	}
+	public Long getId() 
+	{
+		return id;
+	}
+
+	// city getter and setter
+	public void setCity(String city) 
+	{
+		this.city = city;
+	}
+	public String getCity() 
+	{
+		return city;
+	}
+
+	// minTemperature getter and setter
+	public void setMinTemperature(Double minTemperature) 
+	{
+		this.minTemperature = minTemperature;
+	}
+	public Double getMinTemperature() 
+	{
+		return minTemperature;
+	}
+
+	// maxTemperature getter and setter
+	public void setMaxTemperature(Double maxTemperature) 
+	{
+		this.maxTemperature = maxTemperature;
+	}
+	public Double getMaxTemperature() 
+	{
+		return maxTemperature;
+	}
+}
