@@ -1,0 +1,175 @@
+// DoctorController.java
+package com.springboot.controller;
+
+import com.springboot.dao.DoctorDAO;
+import com.springboot.domain.Doctor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+public class DoctorController 
+{
+    DoctorDAO dao = new DoctorDAO();
+
+	@GetMapping("/doctor/list")
+    List<Doctor> getDoctors() 
+    {
+        return dao.list();
+    }
+
+    @PostMapping("/doctor/create")
+    Boolean create(@RequestBody Doctor doctor) 
+    {
+        return  dao.save(doctor);
+    }
+}
+
+
+
+
+// App.java
+package com.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.springboot.controller.DoctorController;
+
+@SpringBootApplication
+public class App 
+{
+	public static void main(String[] args) 
+	{
+		SpringApplication.run(App.class, args);
+	}
+}
+
+
+
+
+// Doctor.java
+package com.springboot.domain;
+
+public class Doctor 
+{
+	private Integer id;
+	private String name;
+	private String qualification;
+	private Double experience;
+	private String specialization;
+	private Double consultingFees;
+		
+	public Doctor(){}
+	
+	public Doctor(Integer id, String name, String qualification,
+			Double experience, String specialization, Double consultingFees) 
+	{
+		super();
+		this.id = id;
+		this.name = name;
+		this.qualification = qualification;
+		this.experience = experience;
+		this.specialization = specialization;
+		this.consultingFees = consultingFees;
+	}
+	
+	// id getter and setter
+	public void setId(Integer id)
+ 	{
+		this.id = id;
+	}
+	public Integer getId() 
+	{
+		return id;
+	}
+	
+	// name getter and setter
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+	
+	// qualification getter and setter
+	public void setQualification(String qualification) 
+	{
+		this.qualification = qualification;
+	}
+	public String getQualification() 
+	{
+		return qualification;
+	}
+	
+	// experience getter and setter
+	public void setExperience(Double experience) 
+	{
+		this.experience = experience;
+	}
+	public Double getExperience() 
+	{
+		return experience;
+	}
+	
+	// specialization getter and setter
+	public void setSpecialization(String specialization) 
+	{
+		this.specialization = specialization;
+	}
+	public String getSpecialization() 
+	{
+		return specialization;
+	}
+	
+	// consultingFees getter and setter
+	public void setConsultingFees(Double consultingFees) 
+	{
+		this.consultingFees = consultingFees;
+	}
+	public Double getConsultingFees() 
+	{
+		return consultingFees;
+	}
+}
+
+
+
+
+// DoctorDAO.java
+package com.springboot.dao;
+
+import com.springboot.domain.Doctor;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class DoctorDAO 
+{
+	static ArrayList<Doctor> doctorList = new ArrayList<Doctor>();
+
+	static 
+	{
+		doctorList.add(new Doctor(1,"Harinii","MBBS",4.2,"Orthologist",750.00));
+		doctorList.add(new Doctor(2,"Nithin","MBBS",2.0,"Gynecologist",1500.00));
+	}
+	
+	public Boolean save(Doctor doctor) 
+	{
+		doctorList.add(doctor);
+		return true;
+	}
+
+	public List<Doctor> list() 
+	{
+		return doctorList;
+	}
+}
