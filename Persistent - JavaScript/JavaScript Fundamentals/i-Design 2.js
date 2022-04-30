@@ -1,4 +1,3 @@
-// app.js
 var fs = require('fs');
 var input = fs.readFileSync('input.txt').toString();
 var age = Number(input);
