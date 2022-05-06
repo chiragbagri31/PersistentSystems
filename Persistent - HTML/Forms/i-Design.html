@@ -1,0 +1,78 @@
+// index.html
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Registration Form</h1>
+
+        <!-- form -->
+        <form action="display.php" method="POST">
+
+            <!-- for Name -->
+            <div>
+                <label for="name">Name : </label>
+                <input type="text" name="name" id="name">
+            </div><br>
+
+            <!-- for Username -->
+            <div>
+                <label for="userName">Username : </label>
+                <input type="text" name="userName" id="userName">
+            </div><br>
+
+            <!-- for Password -->
+            <div>
+                <label for="password">Password : </label>
+                <input type="password" name="password" id="password">
+            </div><br>
+
+            <!-- for Re-enter Password -->
+            <div>
+                <label for="re-EnterPassword">Re-enter Password : </label>
+                <input type="password" name="re-EnterPassword" id="re-EnterPassword">
+            </div><br>
+
+            <!-- for Address -->
+            <div>
+                <label for="address">Address : </label>
+                <textarea name="address" id="address" row="3" cols="20"></textarea>
+            </div><br>
+
+            <!-- for Gender -->
+            <div>
+                <label for="gender">Gender : </label>
+                <input type="radio" name="gender" id="male">
+                <label for="male">Male</label>
+                <input type="radio" name="gender" id="female">
+                <label for="female">Female</label>
+            </div><br>
+
+            <!-- for District Name -->
+            <div>
+                <label for="districtName">District Name : </label>
+                <select name="districtName" id="districtName">
+                    <option>New York</option>
+                    <option>Coimbatore</option>
+                </select>
+            </div><br>
+
+            <!-- for Events -->
+            <div>
+                <label for="events[]">Events : </label>
+                <input type="checkbox" name="events[]" id="wedding">
+                <label for="wedding">Wedding</label>
+                <input type="checkbox" name="events[]" id="corporate">
+                <label for="corporate">Corporate</label>
+                <input type="checkbox" name="events[]" id="social">
+                <label for="social">Social</label>
+            </div><br>
+
+            <!-- for Button -->
+            <div>
+                <input type="submit" name="register" value="Register">
+            </div>
+        </form>
+    </body>
+</html>
