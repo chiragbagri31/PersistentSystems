@@ -1,0 +1,47 @@
+// index.html
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <h1>Registration form</h1>
+
+        <!-- Form -->
+        <form action="display.php" method="POST">
+
+            <!-- for Name -->
+            <div>
+                <label for="name">Name : </label>
+                <input type="text" name="name" id="name">
+            </div><br>
+
+            <!-- for Username -->
+            <div>
+                <label for="userName">Username : </label>
+                <input type="text" name="userName" id="userName">
+            </div><br>
+
+            <!-- for Password -->
+            <div>
+                <label for="password">Password : </label>
+                <input type="password" name="password" id="password">
+            </div><br>
+
+            <!-- for MobileNumber -->
+            <div>
+                <label for="mobilenumber">MobileNumber : </label>
+                <input type="tel" name="mobilenumber" id="mobilenumber" maxlength="10">
+            </div><br>
+
+            <!-- for Address -->
+            <div>
+                <label for="address">Address : </label>
+                <textarea name="address" id="address" rows="3" cols="20" maxlength="200"></textarea>
+            </div><br>
+
+            <!-- for button -->
+            <div>
+                <input type="submit" name="register" value="Register">
+            </div>
+        </form>
+    </body>
+</html>
