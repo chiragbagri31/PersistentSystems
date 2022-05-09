@@ -1,0 +1,52 @@
+// index.html
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			h2
+			{
+				text-align : center;
+			}
+
+			.image 
+			{
+				float: left;
+				width: 50%;
+				height: auto;
+			}
+
+			#container
+			{
+				position : relative;
+			}
+
+			#overlay
+			{
+				overflow: hidden;
+				transition:1s ease; 
+				width:0px;
+				position: absolute;
+				height: 100%;
+			}
+
+			#text
+			{
+				text-align : justify;
+				transform : translate(-270px, -100px);
+				position : absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>Wedding Event</h2>
+		<div id="container">
+			<img src="image.jpg" class="image">
+
+			<div id="overlay">
+				<div id="text">
+					<p>A wedding is a ceremony where two people or a couple are united in marriage. Wedding traditions and customs vary greatly between cultures, ethnic groups, religions, countries, and social classes. Most wedding ceremonies involve an exchange of marriage vows by the couple, presentation of a gift (offering, ring(s), symbolic item, flowers, money), and a public proclamation of marriage by an authority figure or celebrant. Special wedding garments are often worn, and the ceremony is sometimes followed by a wedding reception. Music, poetry, prayers or readings from religious texts or literature are also commonly incorporated into the ceremony.</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
