@@ -38,6 +38,22 @@ export default App;
 
 
 
+// App.css
+.container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.field {
+  padding: 10px 20px 10px 20px;
+  margin: 10px 20px;
+  background-color: #d0d0d0;
+  border-radius: 20px;
+}
+
+
+
+
 // InputField.js
 import React from "react";
 
